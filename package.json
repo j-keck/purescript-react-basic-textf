@@ -1,0 +1,27 @@
+{
+  "name": "purescript-react-basic-textf",
+  "version": "0.1.0",
+  "description": "Text formatting library for React-Basic",
+  "main": "index.js",
+  "directories": {
+    "example": "example",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j-keck/purescript-react-basic-textf.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/j-keck/purescript-react-basic-textf/issues"
+  },
+  "homepage": "https://github.com/j-keck/purescript-react-basic-textf#readme",
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
+}
