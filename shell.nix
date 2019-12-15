@@ -20,7 +20,7 @@ let
 
   buildInputs =
     (with pkgs; [ dhall nodejs chromium ]) ++
-    (with pkgs.nodePackages; [ parcel-bundler ]) ++
+    (with pkgs.nodePackages; [ parcel-bundler bower ]) ++
     (with easy-ps; [ purs spago spago2nix ]);
 
 in pkgs.mkShell {

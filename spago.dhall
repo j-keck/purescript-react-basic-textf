@@ -14,4 +14,6 @@
     ./packages.dhall
 , sources =
     [ "src/**/*.purs", "test/**/*.purs", "example/**/*.purs" ]
+, license = "MIT"
+, repository = "https://github.com/j-keck/purescript-react-basic-textf"
 }
