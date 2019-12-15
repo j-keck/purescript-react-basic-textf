@@ -1,5 +1,13 @@
-{ pkgs ? import <nixpkgs> {} }:
 let
+
+  # steps to update package set:
+  #  - fetch the actual commit: git ls-remote https://github.com/nixos/nixpkgs-channels nixos-19.09
+  #  - get the sha256: nix-prefetch-url --unpack https://github.com/NixOS/nixpkgs/archive/<COMMIT>.tar.gz
+  pkgs = import (builtins.fetchTarball {
+    name = "nixos-19.09-57b7b0";
+    url = https://github.com/NixOS/nixpkgs/archive/57b7b019812fbe2cb760dd38d521f1cc16b14877.tar.gz;
+    sha256 = "0xsgwyp4dfsfynag2prkagw0mdg7zx7gyljf8yvsc047ppnd85a8";
+  }) {};
 
   # 2019-12-04T18:20:17+09:00
   easy-ps = import (pkgs.fetchFromGitHub {
