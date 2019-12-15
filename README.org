@@ -1,0 +1,112 @@
+#+TITLE: Formatter library for [[https://pursuit.purescript.org/packages/purescript-react-basic/][React-Basic]]
+#+PROPERTY: header-args :eval never-export
+
+* Intro
+
+Formatting Numbers or Timestamps in [[https://pursuit.purescript.org/packages/purescript-react-basic/][React-Basic]] can be boilerplate.
+This small library gives you functions to format ~Int~, ~Number~, ~Data.Time~, ~Data.Date~ and ~Data.DateTime~ values.
+
+
+* API
+
+Each formatter function expects a record with properties which defines
+ how the given value should be formattet.
+
+~CommonProps~ are properties which all formatters accepts and are defined as:
+
+~{ title :: String, className :: String, css :: React.Basic.DOM.Internal.CSS }~
+
+
+Use the ~textf :: Array Fragment -> React.Basic.JSX~ function to create the side content.
+
+You can format:
+
+*** Text
+
+~text :: { | CommonProps } -> String -> Fragment~.
+
+
+*** Int
+
+ ~int :: { | CommonProps } -> Int -> Fragment~
+
+*** Number
+
+~num :: { precision :: Int | CommonProps } -> Int -> Fragment~
+
+*** Time, Date or DateTime
+
+
+~time :: { format :: Array <TimeFmt> | CommonProps } -> Data.Time.Time -> Fragment~
+
+~date :: { format :: Array <DateFmt> | CommonProps } -> Data.Date.Date -> Fragment~
+
+~dateTime :: { format :: Array <DateTimeFmt> | CommonProps } -> Data.DateTime.DateTime -> Fragment~
+
+
+Currently supported formats are:
+
+~<TimeFmt~ are: ~hh~, ~mi~ and ~ss~
+
+~<DateFmt>~ are: ~dd~, ~mm~ and ~yyyy~
+
+~<DateTimeFmt> are: ~dd~, ~mm~, ~yyyy~, ~hh~, ~mi~ and ~ss~
+
+
+
+* Example
+
+This code snippet:
+#+BEGIN_SRC purescript :exports code
+  let a = 3
+      b = 43.1234567
+      header = TF.text { style: R.css
+                           { display: "block"
+                           , fontSize: "xx-large"
+                           , margin: "20px 0px 5px 0px"
+                           }
+                       }
+      jsx = TF.textf
+            [ header "Text / Numbers"
+            , TF.text { title: "very simple!" } "a simple example: "
+            , TF.int' a
+            , TF.text' " * "
+            , TF.num { precision: 2} b
+            , TF.text' " = "
+            , TF.num { precision: 2
+                     , style: R.css { fontWeight: "bold" }
+                     } (toNumber a * b)
+            , TF.text' "."
+              -- ------------------------------------------
+            , header "Time"
+            , TF.text' "Current time: "
+            , TF.time { format: [TF.hh, TF.s ":", TF.mi, TF.s ":", TF.ss]
+                      , title: "Format: hh:mi:ss"
+                      , style: R.css { fontFamily: "monospace" }
+                      } $ DT.time dt
+              -- ------------------------------------------
+            , header "Date"
+            , TF.text' "Current date: "
+            , TF.date { format: [TF.dd, TF.s ".", TF.mm, TF.s ".", TF.yyyy]
+                      , title: "Format: dd.mm.yyyy"
+                      , style: R.css { border: "1px solid black" }
+                      } $ DT.date dt
+
+              -- ------------------------------------------
+            , header "DateTime"
+            , TF.dateTime { format: [ TF.s "Day: ", TF.dd, TF.s ", Month: ", TF.mm
+                                    , TF.s ", Hour: ", TF.hh, TF.s ", Seconds: ", TF.ss
+                                    ]
+                          } dt
+            ]
+  mount jsx
+#+END_SRC
+/see [[./example/Example.purs][Example.purs]] for the full code/
+
+generates the following output: [[./example/index.png]]
+
+
+* TODO's
+
+  - don't use empty string if a property is missing: [[./src/React/Basic/DOM/Textf/Props.purs]]
+  - add duration
