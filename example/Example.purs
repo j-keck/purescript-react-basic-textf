@@ -3,6 +3,7 @@ module Example where
 import Data.DateTime as DT
 import Data.Int (toNumber)
 import Data.Maybe (maybe)
+import Data.Monoid ((<>))
 import Effect (Effect)
 import Effect.Exception (throw)
 import Effect.Now (nowDateTime)
@@ -35,7 +36,7 @@ main = do
             , TF.num { precision: 2} b
             , TF.text' " = "
             , TF.num { precision: 2
-                     , style: R.css { fontWeight: "bold" }
+                     , style: TF.fontBolder <> TF.textUnderline
                      } (toNumber a * b)
             , TF.text' "."
               -- ------------------------------------------

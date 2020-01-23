@@ -8,6 +8,8 @@ module React.Basic.DOM.Textf
        , module React.Basic.DOM.Textf.Date
        , module React.Basic.DOM.Textf.DateTime
        , module React.Basic.DOM.Textf.DateTimeFormat
+       , module React.Basic.DOM.Textf.Styles.Text
+       , module React.Basic.DOM.Textf.Styles.Font
        ) where
 
 
@@ -22,6 +24,8 @@ import React.Basic.DOM.Textf.Time (time, packTime)
 import React.Basic.DOM.Textf.Date (date, packDate)
 import React.Basic.DOM.Textf.DateTime (dateTime, packDateTime)
 import React.Basic.DOM.Textf.DateTimeFormat (yyyy, mm, dd, hh, mi, ss, s)
+import React.Basic.DOM.Textf.Styles.Text
+import React.Basic.DOM.Textf.Styles.Font
 
 
 -- | formats the given fragments
