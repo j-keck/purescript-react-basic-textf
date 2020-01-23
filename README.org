@@ -6,15 +6,51 @@
 Formatting Numbers or Timestamps in [[https://pursuit.purescript.org/packages/purescript-react-basic/][React-Basic]] can be boilerplate.
 This small library gives you functions to format ~Int~, ~Number~, ~Data.Time~, ~Data.Date~ and ~Data.DateTime~ values.
 
+* Installation
+
+** Spago
+
+If you use spago, add this snippet to your 'additions' section in `packages.dhall`:
+
+#+BEGIN_SRC sh :exports results :results output
+cat <<EOF
+react-basic-textf =
+  { dependencies =
+    [ "foreign"
+    , "maybe"
+    , "react-basic"
+    , "unsafe-coerce"
+    ]
+  , repo = "https://github.com/j-keck/purescript-react-basic-textf.git"
+  , version = "$(git describe --tags --match 'v*')"
+  }
+EOF
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+react-basic-textf =
+  { dependencies =
+    [ "foreign"
+    , "maybe"
+    , "react-basic"
+    , "unsafe-coerce"
+    ]
+  , repo = "https://github.com/j-keck/purescript-react-basic-textf.git"
+  , version = "v0.1.1"
+  }
+#+end_example
+
+
+And then use `spago install react-basic-textf` to install this library.
 
 * API
 
-Each formatter function expects a record with properties which defines
- how the given value should be formattet.
+Each formatter function expects a record with properties which defines how the given value should be formattet.
 
 ~CommonProps~ are properties which all formatters accepts and are defined as:
 
-~{ title :: String, className :: String, css :: React.Basic.DOM.Internal.CSS }~
+~{ title :: String, className :: String, style :: React.Basic.DOM.Internal.CSS }~
 
 
 Use the ~textf :: Array Fragment -> React.Basic.JSX~ function to create the side content.
@@ -46,11 +82,11 @@ You can format:
 
 Currently supported formats are:
 
-~<TimeFmt~ are: ~hh~, ~mi~ and ~ss~
+~<TimeFmt>~ are: ~hh~, ~mi~ and ~ss~
 
 ~<DateFmt>~ are: ~dd~, ~mm~ and ~yyyy~
 
-~<DateTimeFmt> are: ~dd~, ~mm~, ~yyyy~, ~hh~, ~mi~ and ~ss~
+~<DateTimeFmt>~ are: ~dd~, ~mm~, ~yyyy~, ~hh~, ~mi~ and ~ss~
 
 
 
@@ -74,7 +110,7 @@ This code snippet:
             , TF.num { precision: 2} b
             , TF.text' " = "
             , TF.num { precision: 2
-                     , style: R.css { fontWeight: "bold" }
+                     , style: TF.fontBolder <> TF.textUnderline
                      } (toNumber a * b)
             , TF.text' "."
               -- ------------------------------------------
