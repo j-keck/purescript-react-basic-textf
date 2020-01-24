@@ -1,153 +1,209 @@
 #+TITLE: Formatter library for [[https://pursuit.purescript.org/packages/purescript-react-basic/][React-Basic]]
 #+PROPERTY: header-args :eval never-export
 
-* Intro
+** Intro
 
-Formatting Numbers or Timestamps in [[https://pursuit.purescript.org/packages/purescript-react-basic/][React-Basic]] can be boilerplate.
-This small library gives you functions to format ~Int~, ~Number~, ~Data.Time~, ~Data.Date~ and ~Data.DateTime~ values.
+ Formatting Numbers or Timestamps in [[https://pursuit.purescript.org/packages/purescript-react-basic/][React-Basic]] can be boilerplate.
+ This small library gives you functions to format ~Int~, ~Number~, ~Data.Time~, ~Data.Date~ and ~Data.DateTime~ values.
 
-* Documentation
+** Installation
 
-Module documentation is [[https://pursuit.purescript.org/packages/purescript-react-basic-textf/][published on Pursuit]].
+*** Spago
 
-* Installation
+ If you use spago, add this snippet to your ~additions~ section in ~packages.dhall~:
 
+ #+BEGIN_SRC sh :exports results :results output
+ cat <<EOF
+ react-basic-textf =
+   { dependencies =
+     [ "foreign"
+     , "maybe"
+     , "react-basic"
+     , "unsafe-coerce"
+     ]
+   , repo = "https://github.com/j-keck/purescript-react-basic-textf.git"
+   , version = "$(git describe --tags --match 'v*')"
+   }
+ EOF
+ #+END_SRC
 
-** Spago
-
-If you use spago, add this snippet to your 'additions' section in `packages.dhall`:
-
-#+BEGIN_SRC sh :exports results :results output
-cat <<EOF
-react-basic-textf =
-  { dependencies =
-    [ "foreign"
-    , "maybe"
-    , "react-basic"
-    , "unsafe-coerce"
-    ]
-  , repo = "https://github.com/j-keck/purescript-react-basic-textf.git"
-  , version = "$(git describe --tags --match 'v*')"
-  }
-EOF
-#+END_SRC
-
-#+RESULTS:
-#+begin_example
-react-basic-textf =
-  { dependencies =
-    [ "foreign"
-    , "maybe"
-    , "react-basic"
-    , "unsafe-coerce"
-    ]
-  , repo = "https://github.com/j-keck/purescript-react-basic-textf.git"
-  , version = "v0.2.0"
-  }
-#+end_example
+ #+RESULTS:
+ #+begin_example
+ react-basic-textf =
+   { dependencies =
+     [ "foreign"
+     , "maybe"
+     , "react-basic"
+     , "unsafe-coerce"
+     ]
+   , repo = "https://github.com/j-keck/purescript-react-basic-textf.git"
+   , version = "v0.2.0"
+   }
+ #+end_example
 
 
-And then use `spago install react-basic-textf` to install this library.
-
-* API
-
-Each formatter function expects a record with properties which defines how the given value should be formattet.
-
-~CommonProps~ are properties which all formatters accepts and are defined as:
-
-~{ title :: String, className :: String, style :: React.Basic.DOM.Internal.CSS }~
+ And then use ~spago install react-basic-textf~ to install this library.
 
 
-Use the ~textf :: Array Fragment -> React.Basic.JSX~ function to create the side content.
+** Usage
 
-You can format:
+#+BEGIN_EXAMPLE
+import React.Basic.DOM as R
+import React.Basic.DOM.Textf as TF
+
+example :: DateTime -> JSX
+example dt = TF.textf
+  [ TF.text { title: "Tooltip text"
+            , style: TF.textUnderline <> R.css { color: "red" }
+            } "This is a red, underlined text. "
+  , TF.jsx $ R.br {}
+  , TF.text' "This is a rounded Number: "
+  , TF.num { precision: 2 } 49.12345679
+  , TF.text' "."
+  , TF.jsx $ R.br {}
+  , TF.text' "This is a Date: "
+  , TF.dateTime { format: [ TF.dd, TF.s ", ", TF.mmmm, TF.s " ", TF.yyyy ] } dt
+  ]
+#+END_EXAMPLE
+ /see [[./example/UsageExample.purs][UsageExample.purs]] for the full code/
+
+creates the following output: [[./example/usage-example.png]]
+
+
+The [[https://pursuit.purescript.org/packages/purescript-react-basic-textf/docs/React.Basic.DOM.Textf#v:textf][textf :: Array Fragment -> React.Basic.JSX]] function takes an array of [[https://pursuit.purescript.org/packages/purescript-react-basic-textf/docs/React.Basic.DOM.Textf.Fragment#t:Fragment][Fragments]] and builds a [[https://pursuit.purescript.org/packages/purescript-react-basic/docs/React.Basic#t:JSX][React.Basic.JSX]] element.
+You can create a Fragment from different values:
+
+  - ~TF.text~: builds a fragment from a ~String~
+  - ~TF.int~: builds a fragment from a ~Int~
+  - ~TF.num~: build a fragment from a ~Number~
+  - ~TF.dateTime~: builds a fragment from a ~Data.DataTime~
+  - ~TF.date~: builds a fragment from a ~Data.Date~
+  - ~TF.time~: builds a fragment from a ~Data.Time~
+  - ~TF.jsx~: builds a fragment from a ~React.Basic.JSX~ (a simple wrapper)
+
+Each of this functions expects a record which describes how the given values are formatted.
 
 *** Text
 
-~text :: { | CommonProps } -> String -> Fragment~.
+  ~text :: { title :: String, className :: String, style :: CSS } -> String -> Fragment~.
+
+   - title: Tooltip text
+   - className: CSS class names
+   - style: CSS styles (example: ~R.css { border: "1px solid black" } <> TF.fontBolder~)
 
 
 *** Int
 
- ~int :: { | CommonProps } -> Int -> Fragment~
+  ~int :: { title :: String, className :: String, style :: CSS } -> Int -> Fragment~.
+
+   - title: Tooltip text
+   - className: CSS class names
+   - style: CSS styles (example: ~R.css { border: "1px solid black" } <> TF.fontBolder~)
 
 *** Number
 
-~num :: { precision :: Int | CommonProps } -> Int -> Fragment~
+  ~num :: { title :: String, className :: String, style :: CSS, precission :: Int } -> Number -> Fragment~.
 
-*** Time, Date or DateTime
+   - title: Tooltip text
+   - className: CSS class names
+   - style: CSS styles (example: ~R.css { border: "1px solid black" } <> TF.fontBolder~)
+   - precission: Defines the number of digits after the decimal point.
 
+*** DateTime, Date or Time
 
-~time :: { format :: Array <TimeFmt> | CommonProps } -> Data.Time.Time -> Fragment~
+  ~dateTime :: { title :: String, className :: String, style :: CSS, format :: Array <DateTimeFmt> } -> DateTime -> Fragment~.
 
-~date :: { format :: Array <DateFmt> | CommonProps } -> Data.Date.Date -> Fragment~
+  ~date :: { title :: String, className :: String, style :: CSS, format :: Array <DateFmt> } -> Date -> Fragment~.
 
-~dateTime :: { format :: Array <DateTimeFmt> | CommonProps } -> Data.DateTime.DateTime -> Fragment~
+  ~time :: { title :: String, className :: String, style :: CSS, format :: Array <TimeFmt> } -> Time -> Fragment~.
 
-
-Currently supported formats are:
-
-~<TimeFmt>~ are: ~hh~, ~mi~ and ~ss~
-
-~<DateFmt>~ are: ~dd~, ~mm~ and ~yyyy~
-
-~<DateTimeFmt>~ are: ~dd~, ~mm~, ~yyyy~, ~hh~, ~mi~ and ~ss~
-
-
-
-* Example
-
-This code snippet:
-#+BEGIN_SRC purescript :exports code
-  let a = 3
-      b = 43.1234567
-      header = TF.text { style: R.css
-                           { display: "block"
-                           , fontSize: "xx-large"
-                           , margin: "20px 0px 5px 0px"
-                           }
-                       }
-      jsx = TF.textf
-            [ header "Text / Numbers"
-            , TF.text { title: "very simple!" } "a simple example: "
-            , TF.int' a
-            , TF.text' " * "
-            , TF.num { precision: 2} b
-            , TF.text' " = "
-            , TF.num { precision: 2
-                     , style: TF.fontBolder <> TF.textUnderline
-                     } (toNumber a * b)
-            , TF.text' "."
-              -- ------------------------------------------
-            , header "Time"
-            , TF.text' "Current time: "
-            , TF.time { format: [TF.hh, TF.s ":", TF.mi, TF.s ":", TF.ss]
-                      , title: "Format: hh:mi:ss"
-                      , style: R.css { fontFamily: "monospace" }
-                      } $ DT.time dt
-              -- ------------------------------------------
-            , header "Date"
-            , TF.text' "Current date: "
-            , TF.date { format: [TF.dd, TF.s ".", TF.mm, TF.s ".", TF.yyyy]
-                      , title: "Format: dd.mm.yyyy"
-                      , style: R.css { border: "1px solid black" }
-                      } $ DT.date dt
-
-              -- ------------------------------------------
-            , header "DateTime"
-            , TF.dateTime { format: [ TF.s "Day: ", TF.dd, TF.s ", Month: ", TF.mm
-                                    , TF.s ", Hour: ", TF.hh, TF.s ", Seconds: ", TF.ss
-                                    ]
-                          } dt
-            ]
-  mount jsx
-#+END_SRC
-/see [[./example/Example.purs][Example.purs]] for the full code/
-
-generates the following output: [[./example/index.png]]
+   - title: Tooltip text
+   - className: CSS class names
+   - style: CSS styles (example: ~R.css { border: "1px solid black" } <> TF.fontBolder~)
+   - format: Formatter rules, how the values are formatted.
 
 
-* TODO's
+Currently supported formatter rules are:
 
-  - don't use empty string if a property is missing: [[./src/React/Basic/DOM/Textf/Props.purs]]
-  - add duration
+  - ~<DateFmt>~ are: ~d~, ~dd~, ~ddd~, ~dddd~, ~m~, ~mm~, ~mmm~, ~mmmm~, and ~yyyy~
+  - ~<TimeFmt>~ are: ~hh~, ~mi~ and ~ss~
+  - ~<DateTimeFmt>~ are: [<DateFmt>|<TimeFmt>]
+
+   where:
+    - ~d~: Day of month - with digits
+    - ~dd~: Day of month - two digits
+    - ~ddd~: Day of month short text - like Mon, Tue, ...
+    - ~dddd~: Day of month full text - like Monday, Tuesday, ...
+    - ~m~: Month with digits
+    - ~mm~: Month with two digits
+    - ~mmm~: Month short text - like Jan, Feb, ...
+    - ~mmmm~: Month full text - like January, February, ...
+    - ~yyyy~: Year
+    - ~hh~: Hours with two digits - in 24h format
+    - ~mi~: Minutes with two digits
+    - ~ss~: Seconds with two digits
+
+
+
+** Example
+
+ This code snippet:
+ #+BEGIN_SRC purescript :exports code
+   let a = 3
+       b = 43.1234567
+       header = TF.text { style: R.css
+                            { display: "block"
+                            , fontSize: "xx-large"
+                            , margin: "20px 0px 5px 0px"
+                            }
+                        }
+       jsx = TF.textf
+             [ header "Text / Numbers"
+             , TF.text { title: "very simple!" } "a simple example: "
+             , TF.int' a
+             , TF.text' " * "
+             , TF.num' b
+             , TF.text' " = "
+             , TF.num { precision: 2
+                      , style: TF.fontBolder <> TF.textUnderline
+                      } (toNumber a * b)
+             , TF.text' "."
+               -- ------------------------------------------
+             , header "Time"
+             , TF.text' "Current time: "
+             , TF.time { format: [TF.hh, TF.s ":", TF.mi, TF.s ":", TF.ss]
+                       , title: "Format: hh:mi:ss"
+                       , style: R.css { fontFamily: "monospace" }
+                       } $ DT.time dt
+               -- ------------------------------------------
+             , header "Date"
+             , TF.text' "Current date: "
+             , TF.date { format: [TF.dd, TF.s ".", TF.mm, TF.s ".", TF.yyyy]
+                       , title: "Format: dd.mm.yyyy"
+                       , style: R.css { border: "1px solid black" }
+                       } $ DT.date dt
+
+               -- ------------------------------------------
+             , header "DateTime"
+             , TF.dateTime { format: [ TF.s "Date: ", TF.dd, TF.s ", ", TF.mmmm, TF.s " ", TF.yyyy
+                                     , TF.s " -  Time: ", TF.hh, TF.s ":", TF.mi
+                                     ]
+                           } dt
+             ]
+   mount jsx
+ #+END_SRC
+ /see [[./example/FullExample.purs][FullExample.purs]] for the full code/
+
+ generates the following output: [[./example/full-example.png]]
+
+
+** Documentation
+
+ Module documentation is [[https://pursuit.purescript.org/packages/purescript-react-basic-textf/][published on Pursuit]].
+
+
+** TODO's
+
+   - don't use empty string if a property is missing: [[./src/React/Basic/DOM/Textf/Props.purs]]
+   - add duration
+

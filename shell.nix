@@ -26,9 +26,17 @@ let
 in pkgs.mkShell {
   inherit buildInputs;
 
-  shellHooks = ''
-    alias create-example="parcel build --public-url ./ example/index.html"
-    alias create-example-screenshot="create-example && chromium --headless --screenshot=example/index.png dist/index.html"
-    alias build-example-screenshot="spago build && create-example-screenshot"
+  shellHooks =
+    let make-example-screenshot = name: window-size:
+          pkgs.writeScript "make-${name}-example-screenshot.sh" ''
+            spago build
+            parcel build --public-url ./ example/${name}-example.html
+            chromium --headless --window-size=${window-size} \
+               --screenshot=example/${name}-example.png dist/${name}-example.html
+          '';
+    in ''
+      alias make-usage-example-screenshot="${make-example-screenshot "usage" "300x70"}"
+      alias make-full-example-screenshot="${make-example-screenshot "full" "400x400"}"
+      alias make-all-screenshots="make-usage-example-screenshot; make-full-example-screenshot"
   '';
 }

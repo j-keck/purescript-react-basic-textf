@@ -1,4 +1,4 @@
-module Example where
+module FullExample where
 
 import Data.DateTime as DT
 import Data.Int (toNumber)
@@ -33,7 +33,7 @@ main = do
             , TF.text { title: "very simple!" } "a simple example: "
             , TF.int' a
             , TF.text' " * "
-            , TF.num { precision: 2} b
+            , TF.num' b
             , TF.text' " = "
             , TF.num { precision: 2
                      , style: TF.fontBolder <> TF.textUnderline
@@ -56,12 +56,11 @@ main = do
 
               -- ------------------------------------------
             , header "DateTime"
-            , TF.dateTime { format: [ TF.s "Day: ", TF.dd, TF.s ", Month: ", TF.mm
-                                    , TF.s ", Hour: ", TF.hh, TF.s ", Seconds: ", TF.ss
+            , TF.dateTime { format: [ TF.s "Date: ", TF.dd, TF.s ", ", TF.mmmm, TF.s " ", TF.yyyy
+                                    , TF.s " -  Time: ", TF.hh, TF.s ":", TF.mi
                                     ]
                           } dt
             ]
-
   mount jsx
 
 
