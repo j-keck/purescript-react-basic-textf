@@ -1,6 +1,7 @@
 module React.Basic.DOM.Textf
        ( textf
        , textf'
+       , module React.Basic.DOM.Textf.Jsx
        , module React.Basic.DOM.Textf.Text
        , module React.Basic.DOM.Textf.Integer
        , module React.Basic.DOM.Textf.Num
@@ -15,8 +16,9 @@ module React.Basic.DOM.Textf
 
 import Data.Function ((<<<))
 import Data.Functor (map)
-import React.Basic as React
+import React.Basic as React.Basic
 import React.Basic.DOM.Textf.Fragment (Fragment(..))
+import React.Basic.DOM.Textf.Jsx (jsx)
 import React.Basic.DOM.Textf.Text (text, text', packText)
 import React.Basic.DOM.Textf.Integer (int, int', packInt)
 import React.Basic.DOM.Textf.Num (num, num', packNum)
@@ -29,13 +31,14 @@ import React.Basic.DOM.Textf.Styles.Font
 
 
 -- | formats the given fragments
-textf :: Array Fragment -> React.JSX
-textf = React.fragment <<< map textf'
+textf :: Array Fragment -> React.Basic.JSX
+textf = React.Basic.fragment <<< map textf'
 
 
 -- | format the given fragment
-textf' :: Fragment -> React.JSX
+textf' :: Fragment -> React.Basic.JSX
 textf' = case _ of
+  Jsx jsx -> jsx
   Text props s -> packText props s
   Int props i -> packInt props i
   Num props n -> packNum props n

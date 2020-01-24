@@ -2,10 +2,13 @@ module React.Basic.DOM.Textf.Fragment where
 
 import Data.DateTime as DT
 import Data.Maybe (Maybe)
+import React.Basic as React.Basic
 import React.Basic.DOM as R
 
+
 data Fragment =
-    Text TextProps String
+    Jsx React.Basic.JSX
+  | Text TextProps String
   | Int IntProps Int
   | Num NumProps Number
   | Time TimeProps DT.Time
