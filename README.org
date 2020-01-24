@@ -37,7 +37,7 @@
      , "unsafe-coerce"
      ]
    , repo = "https://github.com/j-keck/purescript-react-basic-textf.git"
-   , version = "v0.2.0"
+   , version = "v0.3.0"
    }
  #+end_example
 
