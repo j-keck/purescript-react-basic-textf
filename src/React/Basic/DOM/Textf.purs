@@ -23,7 +23,7 @@ import React.Basic.DOM.Textf.Num (num, num', packNum)
 import React.Basic.DOM.Textf.Time (time, packTime)
 import React.Basic.DOM.Textf.Date (date, packDate)
 import React.Basic.DOM.Textf.DateTime (dateTime, packDateTime)
-import React.Basic.DOM.Textf.DateTimeFormat (yyyy, mm, dd, hh, mi, ss, s)
+import React.Basic.DOM.Textf.DateTimeFormat (yyyy, m, mm, mmm, mmmm, d, dd, ddd, dddd, hh, mi, ss, s)
 import React.Basic.DOM.Textf.Styles.Text
 import React.Basic.DOM.Textf.Styles.Font
 
