@@ -6,7 +6,13 @@
  Formatting Numbers or Timestamps in [[https://pursuit.purescript.org/packages/purescript-react-basic/][React-Basic]] can be boilerplate.
  This small library gives you functions to format ~Int~, ~Number~, ~Data.Time~, ~Data.Date~ and ~Data.DateTime~ values.
 
+
 ** Installation
+
+*** Bower
+
+If you use bower, use ~bower install purescript-react-basic-textf~ to install this library.
+
 
 *** Spago
 
